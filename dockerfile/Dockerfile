@@ -17,11 +17,13 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
      /opt/conda/bin/conda install -y python=$PYTHON_VERSION ipython && \
      /opt/conda/bin/conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch && \
      /opt/conda/bin/conda install -y absl-py && \
+     /opt/conda/bin/conda install -y opencv -c conda-forge && \
      /opt/conda/bin/conda clean -ya
 
 RUN pip install tensorboardX \
      numpy \
      pandas \
+     opencv-python \
      tqdm \
      matplotlib \
      albumentations \
