@@ -21,8 +21,10 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
      /opt/conda/bin/conda clean -ya
 
 RUN pip install tensorboardX \
+     setuptools \
      numpy \
      pandas \
+     cython \
      opencv-python \
      tqdm \
      matplotlib \
@@ -32,6 +34,5 @@ RUN pip install tensorboardX \
      scikit-image \
      scikit-learn
 
-RUN git clone https://github.com/cocodataset/cocoapi.git && \
-     python cocoapi/PythonAPI/setup.py build_ext --inplace && \
-     rm -rf build
+RUN git clone https://github.com/cocodataset/cocoapi.git
+RUN cd cocoapi/PythonAPI && python setup.py build_ext install && rm -rf build
