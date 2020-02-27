@@ -1,52 +1,28 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
+FROM pytorch/pytorch:1.4-cuda10.1-cudnn7-runtime
+MAINTAINER kawarasoba
 
-MAINTAINER "@kawarasoba"
-
-ARG PYTHON_VERSION=3.7
-
-ENV PATH /opt/conda/bin:$PATH
-# Changing PATH must be done before pip so that requirements.txt is available
-
-RUN sed -i 's@archive.ubuntu.com@ftp.jaist.ac.jp/pub/Linux@g' /etc/apt/sources.list
-
-RUN apt-get update && \
-     apt-get upgrade -y && \
-     apt-get install --no-install-recommends -y \
-          curl \
-          git-all \ 
-          unzip && \
-     apt-get clean && \
-     rm -rf /var/lib/apt/lists/*
-
-RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
-     chmod +x ~/miniconda.sh && \
-     ~/miniconda.sh -b -p /opt/conda && \
-     rm ~/miniconda.sh && \
-     /opt/conda/bin/conda install -y python=$PYTHON_VERSION numpy pyyaml scipy ipython mkl mkl-include ninja cython typing && \
-     /opt/conda/bin/conda install -y -c pytorch magma-cuda100 && \
-     /opt/conda/bin/conda clean -ya
-
-
-RUN pip install tensorboardX \
-     albumentations \
-     cython \
-     matplotlib \
-     numpy \
-     opencv-python \
-     pandas \
-     tqdm \
-     scikit-image \
-     scikit-learn \
-     segmentation_models_pytorch \
-     setuptools
-     
-RUN git clone https://github.com/cocodataset/cocoapi.git && \
-     cd cocoapi/PythonAPI && \
-     python setup.py build_ext install && \
-     rm -rf build && \
-     cd && \
-     pwd
-
-RUN SHA=ToUcHMe git clone https://github.com/NVIDIA/apex.git \
-     && cd apex \
-     && pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" .
+RUN set -x && \
+    apt-get update && \
+    apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender1 libfontconfig1 zip git && \
+    pip install numpy && \
+    pip install pandas && \
+    pip install opencv-python  && \
+    pip install scikit-image &&  \
+    pip install scikit-learn && \
+    pip install matplotlib  && \
+    pip install cython && \
+    git clone https://github.com/cocodataset/cocoapi.git && \
+    cd cocoapi/PythonAPI && \
+    python setup.py build_ext install && \
+    rm -rf build && \
+    git clone https://github.com/NVIDIA/apex && \
+    cd apex && \
+    pip install -v --no-cache-dir ./ && \
+    cd ../ && \
+    pip install tqdm && \
+    pip install absl-py && \
+    pip install tensorboardX && \
+    pip install albumentations && \
+    pip install efficientnet_pytorch && \
+    pip install pretrainedmodels && \
+    pip install segmentation_models_pytorch

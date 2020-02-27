@@ -1,33 +1,22 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
+FROM pytorch/pytorch:1.4-cuda10.1-cudnn7-runtime
+MAINTAINER kawarasoba
 
-MAINTAINER "@kawarasoba"
-
-ARG PYTHON_VERSION=3.7
-
-ENV PATH /opt/conda/bin:$PATH
-# This must be done before pip so that requirements.txt is available
-
-RUN apt-get update && apt-get install -y --no-install-recommends curl && \
-     rm -rf /var/lib/apt/lists/*
-
-RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
-     chmod +x ~/miniconda.sh && \
-     ~/miniconda.sh -b -p /opt/conda && \
-     rm ~/miniconda.sh && \
-     /opt/conda/bin/conda install -y python=$PYTHON_VERSION ipython && \
-     /opt/conda/bin/conda install -y pytorch torchvision cudatoolkit=10.0 -c pytorch && \
-     /opt/conda/bin/conda install -y absl-py && \
-     /opt/conda/bin/conda install -y opencv -c conda-forge && \
-     /opt/conda/bin/conda clean -ya
-
-RUN pip install tensorboardX \
-     numpy \
-     pandas \
-     opencv-python \
-     tqdm \
-     matplotlib \
-     albumentations \
-     pretrainedmodels \
-     efficientnet_pytorch \
-     scikit-image \
-     scikit-learn
+RUN set -x && \
+    apt-get update && \
+    apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender1 libfontconfig1 zip git && \
+    pip install numpy && \
+    pip install pandas && \
+    pip install opencv-python  && \
+    pip install scikit-image &&  \
+    pip install scikit-learn && \
+    pip install matplotlib  && \
+    pip install tqdm && \
+    pip install absl-py && \
+    pip install tensorboardX && \
+    pip install albumentations && \
+    pip install efficientnet_pytorch && \
+    pip install pretrainedmodels && \
+    git clone https://github.com/NVIDIA/apex && \
+    cd apex && \
+    pip install -v --no-cache-dir ./ && \
+    cd ../
