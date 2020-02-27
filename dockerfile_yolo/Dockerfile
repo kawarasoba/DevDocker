@@ -12,11 +12,14 @@ RUN set -x && \
     pip install scikit-learn && \
     pip install absl-py && \
     pip install tensorboardX && \
-    pip install albumentations && \
-    pip install efficientnet_pytorch && \
-    pip install pretrainedmodels && \
-    git clone https://github.com/NVIDIA/apex && \
-    cd apex && \
-    pip install -v --no-cache-dir ./ && \
-    cd ../
+    pip install albumentations
 # numpy, matplotlib, tqdm are already satisfied on torch's image
+
+RUN pip install cmake && \
+    git clone https://github.com/AlexeyAB/darknet.git && \
+    cd darknet && \
+    mkdir build-release && \
+    cd build-release && \
+    cmake .. && \
+    make && \
+    make install
