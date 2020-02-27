@@ -19,7 +19,7 @@ RUN set -x && \
     rm -rf build && \
     git clone https://github.com/NVIDIA/apex && \
     cd apex && \
-    pip install -v --no-cache-dir ./ && \
+    pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./ && \
     cd ../ && \
     pip install tqdm && \
     pip install absl-py && \
