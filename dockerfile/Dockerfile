@@ -1,6 +1,8 @@
 FROM pytorch/pytorch:1.4-cuda10.1-cudnn7-runtime
 MAINTAINER kawarasoba
 
+CMD ["echo", "PyTorch-1.4 Customized"]
+
 RUN set -x && \
     apt-get update && \
     apt-get install -y libglib2.0-0 libsm6 libxext6 libxrender1 libfontconfig1 zip git && \
